@@ -279,7 +279,7 @@ public static class Simulation
         
     }
 
-    public static  float[] RouteTest(List<Item> Route,int simulations = 500000)
+    public static  float[] RouteTest(List<Item> Route,int simulations = 100000)
     {
         float TotalSimus = 0;
         float ToRoom100 = 0;
@@ -289,8 +289,14 @@ public static class Simulation
         float TwoHitsLSJBB = 0;
         while (TotalSimus != simulations)
         {
+            List<Item> RouteCopy = new List<Item>();
+            foreach (Item i in Route)
+            {
+                RouteCopy.Add(i);
+                
+            }
             TotalSimus++;
-            List<Item> result = Simulation.FullSimu(StartingItems:Route);
+            List<Item> result = Simulation.FullSimu(StartingItems:RouteCopy);
 
         
             if(result != null)
@@ -363,76 +369,20 @@ public static class Program
 
         DataSetup();
         List<int> values = new List<int>();
-        float TotalSimus = 0;
-        float ToRoom100 = 0;
-        float SixHits = 0;
-        float SixHitsLSJBB = 0;
-        float TwoHits = 0;
-        float TwoHitsLSJBB = 0;
         List<Item> SeaSpongesRoute = new List<Item>{Items.ShellShock,Items.FireBurst,Items.FireBurst,Items.CatchCard,Items.CatchCard,Items.CatchCard,Items.ShootingStar,Items.ShootingStar,Items.ShootingStar,Items.ShootingStar};
         List<Item> MohocRouteOne = new List<Item>{Items.FireBurst,Items.ShellShock,Items.ShellShock,Items.ShellShock};
         List<Item> MohocRouteTwo = new List<Item>{Items.FireBurst,Items.FireBurst,Items.FireBurst, Items.FireBurst,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.POWBlock};
-        while (true)
-        {
-            TotalSimus++;
-            List<Item> result = Simulation.FullSimu(StartingItems:new List<Item>{Items.FireBurst,Items.FireBurst,Items.FireBurst, Items.FireBurst,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.POWBlock});
-
         
-            if(result != null)
-            {
-                
+
+        float[] result = Simulation.RouteTest(SeaSpongesRoute);
+        float TotalSimus = result[0];
+        float ToRoom100 = result[1];
+        float SixHits = result[4];
+        float SixHitsLSJBB = result[5];
+        float TwoHits = result[2];
+        float TwoHitsLSJBB = result[3];
+      
             
-
-            ToRoom100++;
-            int sumHits = 0;
-            foreach(Item i in result)
-            {
-                sumHits += i.Hits;
-                
-            }
-            if(sumHits >= 10)
-            {
-                TwoHits++;
-                TwoHitsLSJBB++;
-            }
-            else
-            {
-                if(result.Contains(Items.BlockBlock) || result.Contains(Items.LifeShroom))
-                {
-                    TwoHitsLSJBB++;
-                }
-            }
-            if(sumHits >= 30)
-            {
-                //THIS IS NOT ACCURATE FOR EDGE CASES WITH ICE STORMS
-                //FIX SOON PLS
-                SixHits++;
-                SixHitsLSJBB++;
-
-            }
-            else
-            {
-                foreach (Item i in result)
-                {
-                    if(i == Items.BlockBlock || i == Items.LifeShroom)
-                    {
-                        sumHits += 10;
-                    }
-
-                    
-                }
-                if(sumHits >= 30)
-                {
-                    //THIS IS NOT ACCURATE FOR EDGE CASES WITH ICE STORMS
-                    //FIX SOON PLS
-                   
-                    SixHitsLSJBB++;
-
-                }
-            }
-            }
-            if (TotalSimus % 10000 == 0)
-            {
                 Console.WriteLine($"simulations:         {TotalSimus}");
                 
                 Console.WriteLine($"getting to room 100: {(ToRoom100/TotalSimus).ToString("N10")}");
@@ -442,45 +392,12 @@ public static class Program
                 Console.WriteLine($"Six hits with ls/BB: {(SixHitsLSJBB/TotalSimus).ToString("N10")}");
                 Console.WriteLine($"two hits :           {(TwoHits/TotalSimus).ToString("N10")}");
                 Console.WriteLine($"two hits with ls/BB: {(TwoHitsLSJBB/TotalSimus).ToString("N10")}");
-            }
       
-        }
+        
 
 
 
-        return;
-        List<Item[]> j = new List<Item[]>();
-        for (int i = 0; i < 10000000; i++)
-        {
-            var a = Simulation.FullSimu();
-            Console.WriteLine(a);
-            Console.ReadLine();
-            j.Add(Simulation.FullSimu().ToArray<Item>()); 
-            
-            if (i % 10000 == 0){
-                Dictionary<Item,float> Amounts = new Dictionary<Item, float>();
-
-            foreach(Item[] items in j)
-            {
-                //counts up all the items into amounts
-                foreach (Item item in items)
-                {
-                    if (!(Amounts.ContainsKey(item)))
-                    {
-                        Amounts[item] = 0;
-                    }
-                    Amounts[item] = Amounts[item] + 1;
-                }
-               
-            }
-            foreach (var pair in Amounts)
-                {
-                    Console.WriteLine(pair.Key + ": " + (pair.Value / j.Count));
-                }
-                Console.WriteLine("\n");
-                }
-
-        }
+        
          
 
     }
