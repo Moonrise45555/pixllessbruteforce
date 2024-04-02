@@ -135,12 +135,12 @@ public static class Simulation
 
     }
     
-    public static List<Item>? FullSimu(int Type = 0, bool IgnoreImmunities = false, List<Item>? StartingItems = null)
+    public static List<Item>? FullSimu(int Type = 0, bool IgnoreImmunities = false, List<Item>? StartingItems = null,int StartingRoom=0,bool SmartDescisions=false)
     {
         StartingItems ??= new List<Item>();
         /* Simulates a full pixlless pit run and returns the Items owned into room 100. Type 0 is always killing every enemy possible without items, Type 1 is only killing until you reach the key.*/
         List<Item> OwnedItems = StartingItems;
-        int RoomNum = 0;
+        int RoomNum = StartingRoom;
         while (RoomNum != 99)
         {
             
@@ -231,6 +231,8 @@ public static class Simulation
                     }
                     
                     Proposal = OwnedItems[RNG.r.Next(0,OwnedItems.Count)];
+                    if (SmartDescisions)
+                        Descision(RoomNum,OwnedItems);
                 } 
                 while(!Proposal.Damaging);
                 //we now have a usable item
@@ -279,7 +281,36 @@ public static class Simulation
         
     }
 
-    public static  float[] RouteTest(List<Item> Route,int simulations = 100000)
+    public static int Descision(int RoomNum,List<Item> items)
+    {
+        float[] CurrentChances = RouteTest(items,false,10000,RoomNum);
+        List<float[]> ModifiedChances = new List<float[]>();
+        for (int i = 0; i < items.Count; i++)
+        {
+            Item buffer = items[i];
+            items.RemoveAt(i);
+            ModifiedChances.Add(RouteTest(items,false,5000,RoomNum + 1));
+            items.Insert(i,buffer);
+
+            
+        }
+        int MinChanceInd = 0;
+        for (int i = 0; i < ModifiedChances.Count; i++)
+        {
+            if (CurrentChances[2] - ModifiedChances[i][2] < ModifiedChances[MinChanceInd][2])
+            {
+                MinChanceInd = i;
+
+            }
+            
+        }
+       
+        return MinChanceInd;
+
+
+    }
+
+    public static  float[] RouteTest(List<Item> Route, bool SmartChoices=false,int simulations = 10000,int RoomNum=0)
     {
         float TotalSimus = 0;
         float ToRoom100 = 0;
@@ -296,7 +327,7 @@ public static class Simulation
                 
             }
             TotalSimus++;
-            List<Item> result = Simulation.FullSimu(StartingItems:RouteCopy);
+            List<Item> result = Simulation.FullSimu(StartingItems:RouteCopy,StartingRoom:RoomNum,SmartDescisions:SmartChoices);
 
         
             if(result != null)
@@ -373,14 +404,37 @@ public static class Program
         List<Item> MohocRouteOne = new List<Item>{Items.FireBurst,Items.ShellShock,Items.ShellShock,Items.ShellShock};
         List<Item> MohocRouteTwo = new List<Item>{Items.FireBurst,Items.FireBurst,Items.FireBurst, Items.FireBurst,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.POWBlock};
         
+        List<Item> randomRoute()
+        {
+            List<Item> ItemPool = new List<Item>{Items.FireBurst,Items.LifeShroom,Items.POWBlock,Items.ShellShock,Items.IceStorm};
+            return new List<Item>{ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)],ItemPool[RNG.r.Next(0,5)]};
 
-        float[] result = Simulation.RouteTest(SeaSpongesRoute);
-        float TotalSimus = result[0];
-        float ToRoom100 = result[1];
-        float SixHits = result[4];
-        float SixHitsLSJBB = result[5];
-        float TwoHits = result[2];
-        float TwoHitsLSJBB = result[3];
+
+        }
+        float maxChance = -1;
+        while (true){
+            List<Item> Route = randomRoute();
+            float[] result = Simulation.RouteTest(Route,simulations:100,SmartChoices:true);
+            float TotalSimus = result[0];
+            float ToRoom100 = result[1];
+            float SixHits = result[4];
+            float SixHitsLSJBB = result[5];
+            float TwoHits = result[2];
+            float TwoHitsLSJBB = result[3];
+
+            if (-1==-1)
+            {
+        
+                string RouteString = "route : ";
+                foreach (Item i in Route)
+                {
+                    RouteString = RouteString + i.name + " ";
+            
+
+            
+                }
+                Console.WriteLine("-----");
+                Console.WriteLine(RouteString);
       
             
                 Console.WriteLine($"simulations:         {TotalSimus}");
@@ -392,6 +446,9 @@ public static class Program
                 Console.WriteLine($"Six hits with ls/BB: {(SixHitsLSJBB/TotalSimus).ToString("N10")}");
                 Console.WriteLine($"two hits :           {(TwoHits/TotalSimus).ToString("N10")}");
                 Console.WriteLine($"two hits with ls/BB: {(TwoHitsLSJBB/TotalSimus).ToString("N10")}");
+                maxChance = TwoHits / TotalSimus;
+            }
+        }
       
         
 
