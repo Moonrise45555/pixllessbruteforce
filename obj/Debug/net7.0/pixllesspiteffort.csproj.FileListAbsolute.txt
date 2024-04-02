@@ -1,0 +1,15 @@
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\bin\Debug\net7.0\pixllesspiteffort.exe
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\bin\Debug\net7.0\pixllesspiteffort.deps.json
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\bin\Debug\net7.0\pixllesspiteffort.runtimeconfig.json
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\bin\Debug\net7.0\pixllesspiteffort.dll
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\bin\Debug\net7.0\pixllesspiteffort.pdb
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.csproj.AssemblyReference.cache
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.AssemblyInfoInputs.cache
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.AssemblyInfo.cs
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.csproj.CoreCompileInputs.cache
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.dll
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\refint\pixllesspiteffort.dll
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.pdb
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\pixllesspiteffort.genruntimeconfig.cache
+C:\Users\jkerz\Desktop\Programming\Projects\pixllesspiteffort\obj\Debug\net7.0\ref\pixllesspiteffort.dll
