@@ -206,8 +206,14 @@ public static class Simulation
             while(KeyBits.Contains(true))
             {
                 Item Proposal;
+                int Timer = 0;
                 do
                 {
+                    Timer++;
+                    if(Timer > 500)
+                    {
+                        return null;
+                    }
                     if(OwnedItems.Count == 0)
                     {
                         if(DEBUG)
@@ -215,6 +221,7 @@ public static class Simulation
                         //softlock if we have no items
                         return null;
                     }
+
                     bool hasDamaging = false;
                     foreach(Item it in OwnedItems)
                     {
@@ -234,7 +241,7 @@ public static class Simulation
                     if (SmartDescisions)
                         Descision(RoomNum,OwnedItems);
                 } 
-                while(!Proposal.Damaging);
+                while(!Proposal.Damaging || Enemies[RNG.r.Next(0,Enemies.Count)].Immunities.Contains(Proposal));
                 //we now have a usable item
                 OwnedItems.Remove(Proposal);
                 //use the item we have chosen
@@ -413,8 +420,8 @@ public static class Program
         }
         float maxChance = -1;
         while (true){
-            List<Item> Route = randomRoute();
-            float[] result = Simulation.RouteTest(Route,simulations:100,SmartChoices:true);
+            List<Item> Route = new List<Item>{Items.CatchCard,Items.CatchCard,Items.ShellShock,Items.ShellShock,Items.ShellShock,Items.ShootingStar,Items.ShootingStar,Items.ShootingStar,Items.ShootingStar,Items.ShootingStar};
+            float[] result = Simulation.RouteTest(Route,simulations:1000000,SmartChoices:false);
             float TotalSimus = result[0];
             float ToRoom100 = result[1];
             float SixHits = result[4];
