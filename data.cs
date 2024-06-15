@@ -76,6 +76,38 @@ public static class Data
      Items.CatchCard,
      Items.CatchCardSP
        };
+    public static List<Item> FlimmItems = new List<Item>
+    {
+        Items.FireBurst,
+        Items.IceStorm,
+        Items.ThunderRage,
+        Items.ShootingStar,
+        Items.POWBlock,
+        Items.ShellShock,
+        Items.BlockBlock,
+        Items.Filler,
+        Items.HotSauce,
+        Items.Filler,
+        Items.GhostShroom,
+        Items.CatchCard,
+        Items.LifeShroom,
+        Items.MysteryBox,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler,
+        Items.Filler
+
+    };
+
+    public static List<int> MBWeights = new List<int>
+    {
+        5,5,10,5,10,3,3,3,3,5,5,3,3,5,10,5,5,10,2
+    };
     public static Room[] Rooms = new Room[100];
 
     public static class Items
@@ -100,16 +132,16 @@ public static class Data
             Items.BlockBlock = new Item(0,0,false,n:"Block Block");
             Items.CatchCard = new Item(0,0,true,mh:false,n:"Catch Card");
             Items.FireBurst = new Item(5,5,true,n:"Fire Burst");
-            Items.GhostShroom = new Item(100000,0,true,n:"Ghost Shroom");
-            Items.HotSauce = new Item(0,0,false,n:"Hot Sauce");
+            Items.GhostShroom = new Item(20,0,true,n:"Ghost Shroom");
+            Items.HotSauce = new Item(0,0,true,n:"Hot Sauce");
             Items.IceStorm = new Item(8,4,true,n:"Ice Storm");
             Items.LifeShroom = new Item(0,0,false,n:"Life Shroom");
-            Items.MysteryBox = new Item(0,0,false,n:"Mystery Box");
+            Items.MysteryBox = new Item(0,0,true,n:"Mystery Box");
             Items.POWBlock = new Item(15,0,true,n:"POW Block");
-            Items.ShellShock = new Item(10000,0,true,n:"Shell Shock");
+            Items.ShellShock = new Item(20,0,true,n:"Shell Shock");
             Items.ShootingStar = new Item(20,5,true,n:"Shooting Star");
             Items.ThunderRage = new Item(12,1,true,n:"Thunder Rage");
-            Items.Filler = new Item(0,0,false,"Filler Item");
+            Items.Filler = new Item(0,0,true,"Filler Item");
             Items.CatchCardSP = new Item(0,0,true,mh:false,n:"Catch Card SP");
 
         }
@@ -197,7 +229,7 @@ public static class Data
         Enemy Gawbus = new Enemy(new Item[4]{Items.CatchCard,Items.ThunderRage,Items.IceStorm,Items.FireBurst},new float[4]{0.004761f,0.047543f,0.03169f,0.015873f},"Gawbus");
         Enemy Copta = new Enemy(new Item[1]{Items.CatchCard},new float[1]{0.00176470588f}, "Copta");
         Enemy SpikedGoomba = new Enemy(new Item[2]{Items.CatchCard,Items.HotSauce},new float[2]{0.00230769f,0.00461f}, "Spiked Goomba",H:1,I:new Item[0]{});
-        Enemy Shlurp = new Enemy(new Item[4]{Items.CatchCard,Items.HotSauce,Items.POWBlock,Items.FireBurst},new float[4]{0.0012f,0.0024f,0.0096f,0.0096f}, "Shlurp",H:999,I:new Item[7]{Items.FireBurst,Items.ThunderRage,Items.POWBlock,Items.GhostShroom,Items.ShellShock,Items.ShootingStar,Items.IceStorm});
+        Enemy Shlurp = new Enemy(new Item[4]{Items.CatchCard,Items.HotSauce,Items.POWBlock,Items.FireBurst},new float[4]{0.0012f,0.0024f,0.0096f,0.0096f}, "Shlurp",H:99999,I:new Item[7]{Items.FireBurst,Items.ThunderRage,Items.POWBlock,Items.GhostShroom,Items.ShellShock,Items.ShootingStar,Items.IceStorm});
         Enemy Spiny = new Enemy(new Item[2]{Items.CatchCard,Items.HotSauce},new float[2]{0.0012f,0.0192f}, "Spiny",H:4,I:new Item[0]{});
         Enemy ChainChomp = new Enemy(new Item[2]{Items.CatchCard,Items.ThunderRage},new float[2]{0.003488372f,0.02325581395f}, "Chain Chomp");
         Enemy RedChomp = new Enemy(new Item[2]{Items.CatchCard,Items.POWBlock},new float[2]{0.003488372f,0.02325581395f}, "Red Chomp");
@@ -209,7 +241,7 @@ public static class Data
         Enemy DullBones = new Enemy(new Item[1]{Items.CatchCard},new float[1]{0.0012f}, "Dull Bones",H:15,I:new Item[3]{Items.GhostShroom,Items.ShellShock,Items.POWBlock});
         Enemy Hogarithm = new Enemy(new Item[5]{Items.CatchCard,Items.HotSauce,Items.GhostShroom,Items.BlockBlock,Items.ShootingStar},new float[5]{0.002f,0.008f,0.008f,0.008f,0.008f},"Hogarithm"); 
         Enemy Koopatrol = new Enemy(new Item[2]{Items.CatchCard,Items.ThunderRage},new float[2]{0.0027272f,0.0357142857142857142857f},"Koopatrol",H:15,I:new Item[0]{});
-        Enemy Shlorp = new Enemy(new Item[4]{Items.CatchCard,Items.HotSauce,Items.POWBlock,Items.FireBurst},new float[4]{0.000909f,0.001818f,0.01454545f,0.00727272f}, "Shlorp",H:999,I:new Item[7]{Items.FireBurst,Items.ThunderRage,Items.POWBlock,Items.GhostShroom,Items.ShellShock,Items.ShootingStar,Items.IceStorm});
+        Enemy Shlorp = new Enemy(new Item[4]{Items.CatchCard,Items.HotSauce,Items.POWBlock,Items.FireBurst},new float[4]{0.000909f,0.001818f,0.01454545f,0.00727272f}, "Shlorp",H:9999,I:new Item[7]{Items.FireBurst,Items.ThunderRage,Items.POWBlock,Items.GhostShroom,Items.ShellShock,Items.ShootingStar,Items.IceStorm});
         Enemy SSkellobit = new Enemy(new Item[3]{Items.CatchCard,Items.GhostShroom,Items.POWBlock},new float[3]{0.0029411f,0.00588235f,0.01764705882f}, "Spiky Skellobit",H:15,I:new Item[1]{Items.IceStorm});
       
 

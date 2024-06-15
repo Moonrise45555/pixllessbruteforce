@@ -48,30 +48,50 @@ public static class Simulation
         
         if (!item.Damaging)
         {
+            if(item.name == "Block Block")
+            {
+                return Enemies;
+            }   
             throw new Exception();
         }
+        
         //takes an item, a group of enemies, and a target enemy, and uses the item. DOES NOT kill enemies under 1 HP, just returns them.
         if (!item.MultiHit)
         {
+            if(RNG.r.Next(0,2) == 0 && item.name == "Catch Card SP")
+            {
+                
+                Enemies[Target].HP = 0;
+            }
+            
             Enemies[Target].HP = Enemies[Target].HP - item.Damage;
             return Enemies;
         }
         else
         {
-            for (int i = 0; i < Enemies.Length; i++)
+            if (item.name == "Mystery Box")
             {
-                
-                if(!Enemies[i].Immunities.Contains(item))
-                {
-                    Enemies[i].HP -= item.Damage;
-                }
+                return UseItem(RNG.MysteryBoxCalc(),Enemies, Target);
             }
+            else 
+            {
+                for (int i = 0; i < Enemies.Length; i++)
+                {
+                
+                    if(!Enemies[i].Immunities.Contains(item))
+                    {
+                        Enemies[i].HP -= item.Damage;
+                    }
+                }
+
+            }
+               
             return Enemies;
         }
 
     }
     
-    public static List<Item>? FullSimu(int Type = 0, bool IgnoreImmunities = false, List<Item>? StartingItems = null,int StartingRoom=0,bool SmartDescisions=false)
+    public static List<Item>? FullSimu(int Type = 0, bool IgnoreImmunities = false, List<Item>? StartingItems = null,int StartingRoom=1,bool SmartDescisions=false)
     {
         StartingItems ??= new List<Item>();
         /* Simulates a full pixlless pit run and returns the Items owned into room 100. Type 0 is always killing every enemy possible without items, Type 1 is only killing until you reach the key.*/
@@ -79,6 +99,23 @@ public static class Simulation
         int RoomNum = StartingRoom;
         while (RoomNum != 99)
         {
+            if((RoomNum + 1) % 10 == 0 && RNG.r.Next(10) < 4)
+            {
+                int counter = 0;
+                foreach (Item i in RNG.FlimmSale())
+                {
+                    if(i != Data.Items.Filler && counter != 2)
+                    {
+                        if (DEBUG) Console.WriteLine($"{i.name} bought from flimm in {RoomNum}");
+                        OwnedItems.Add(i);
+                        counter++;
+                    }
+                }
+            }
+            while(OwnedItems.Count > 10)
+            {
+                OwnedItems.RemoveAt(RNG.r.Next(OwnedItems.Count));
+            }
             
             //determines the KeyEnemy
             List<Enemy> Enemies = Data.Rooms[RoomNum].Enemies.ToList();
@@ -153,7 +190,9 @@ public static class Simulation
                     if(OwnedItems.Count == 0)
                     {
                         if(DEBUG)
-                        Console.WriteLine($"Softlocked vs {Enemies[0].Name}!");
+                        Console.WriteLine($"Softlocked vs {Enemies[0].Name} in {RoomNum}!");
+                        if (DEBUG)
+                        Console.WriteLine("------------------------------------------------------------");
                         //softlock if we have no items
                         return null;
                     }
@@ -168,8 +207,11 @@ public static class Simulation
                     }
                     if (hasDamaging == false)
                     {
-                        if(DEBUG)
-                        Console.WriteLine($"Softlocked vs {Enemies[0].Name}!");
+                         if(DEBUG)
+                        Console.WriteLine($"Softlocked vs {Enemies[0].Name} in {RoomNum}!");
+                        if (DEBUG)
+                        Console.WriteLine("------------------------------------------------------------");
+
                         return null;
                     }
                     
@@ -220,7 +262,10 @@ public static class Simulation
             RoomNum++;
             
         }
+        if(DEBUG)
+        Console.WriteLine("---------------------------------------");
         return OwnedItems;
+        
         
     }
 
@@ -270,11 +315,19 @@ public static class Simulation
                 
             }
             TotalSimus++;
-            List<Item> result = Simulation.FullSimu(StartingItems:RouteCopy,StartingRoom:RoomNum,SmartDescisions:SmartChoices);
-
+            List<Item> result = Simulation.FullSimu(1,StartingItems:RouteCopy,StartingRoom:RoomNum,SmartDescisions:SmartChoices);
+           
         
             if(result != null)
             {
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                if (result[i] == Data.Items.MysteryBox)
+                {
+                    result[i] = RNG.MysteryBoxCalc();
+                }
+            }
                 
             
 
@@ -338,13 +391,14 @@ public static class Program
     
     static void Main()
     {
-        RNG.r = new Random();
+        
 
         List<int> values = new List<int>();
         List<Item> SeaSpongesRoute = new List<Item>{Data.Items.ShellShock,Data.Items.FireBurst,Data.Items.FireBurst,Data.Items.CatchCard,Data.Items.CatchCard,Data.Items.CatchCard,Data.Items.ShootingStar,Data.Items.ShootingStar,Data.Items.ShootingStar,Data.Items.ShootingStar};
-        List<Item> MohocRouteOne = new List<Item>{Data.Items.FireBurst,Data.Items.ShellShock,Data.Items.ShellShock,Data.Items.ShellShock};
+        List<Item> MohocRouteOne = new List<Item>{Data.Items.FireBurst,Data.Items.ShellShock};
         List<Item> MohocRouteTwo = new List<Item>{Data.Items.FireBurst,Data.Items.FireBurst,Data.Items.FireBurst, Data.Items.FireBurst,Data.Items.ShellShock,Data.Items.ShellShock,Data.Items.ShellShock,Data.Items.ShellShock,Data.Items.ShellShock,Data.Items.POWBlock};
-        
+        List<Item> SSS = new List<Item>{Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox,Data.Items.MysteryBox};
+       
         List<Item> randomRoute()
         {
             List<Item> ItemPool = new List<Item>{Data.Items.FireBurst,Data.Items.LifeShroom,Data.Items.POWBlock,Data.Items.ShellShock,Data.Items.IceStorm};
@@ -361,6 +415,8 @@ public static class Program
         float maxChance = -1;
         while (true){
             List<Item> Route = new List<Item>{};
+            Route = SSS;
+            
             float[] result = Simulation.RouteTest(Route,simulations:500000,SmartChoices:false);
              TotalSimus += result[0];
              ToRoom100 += result[1];
